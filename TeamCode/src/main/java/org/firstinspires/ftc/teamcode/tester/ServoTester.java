@@ -11,10 +11,11 @@ public class ServoTester extends OpMode {
     private final double LOWER_BOUND = 0.0;
     private final double HIGHER_BOUND = 1.0;
     private final String SERVO_NAME = "_s";
-    private final Servo servoObj = hardwareMap.get(Servo.class, SERVO_NAME);
+    private Servo servoObj;
     private final Supplier<Boolean> buttonLambda = () -> gamepad1.cross;
     @Override
     public void init() {
+        servoObj = hardwareMap.get(Servo.class, SERVO_NAME);
         servoObj.setPosition(LOWER_BOUND);
     }
     @Override

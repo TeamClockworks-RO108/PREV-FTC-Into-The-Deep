@@ -12,10 +12,11 @@ import java.util.function.Supplier;
 public class MotorTester extends OpMode {
     private final Supplier<Float> powerLambda = () -> gamepad1.left_stick_y;
     private final String MOTOR_NAME = "_m";
-    private final DcMotor motorObj = hardwareMap.get(DcMotor.class, MOTOR_NAME);
+    private DcMotor motorObj;
     private final boolean tickLogs = false;
     @Override
     public void init() {
+        motorObj = hardwareMap.get(DcMotor.class, MOTOR_NAME);
         motorObj.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
