@@ -14,10 +14,11 @@ public class Gripper {
     private static boolean isOpen;
 
     public static void init(HardwareMap hardwareMap){
-        gripperServo = hardwareMap.get(Servo.class, "gripper");
-        rotationServo = hardwareMap.get(Servo.class, "controlOfRotation");
+        gripperServo = hardwareMap.get(Servo.class, "Servo Gripper");
+        rotationServo = hardwareMap.get(Servo.class, "Servo Rotation");
         isOpen = true;
         gripperServo.setPosition(MIN_SERVO_GRIP);
+        rotationServo.setPosition(0.5); //tune
     }
     public static void release (){
         gripperServo.setPosition(MIN_SERVO_GRIP);
@@ -25,7 +26,8 @@ public class Gripper {
     public static void hold(){
         gripperServo.setPosition(MAX_SERVO_GRIP);
     }
-    public static void toogleGripper(){
+
+    public static void toggleGripper(){
         if (isOpen){
             hold();
             isOpen = false;
