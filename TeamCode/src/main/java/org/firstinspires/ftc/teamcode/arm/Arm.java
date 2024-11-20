@@ -13,7 +13,7 @@ public class Arm {
 
     private final static String MOTOR_NAME_R="Motor Arm Rotation";
     private final static String MOTOR_NAME_H="Motor Arm Height";
-    private final static int MAX_POS_H = 3000;
+    private final static int MAX_POS_H = 4500;
     private final static int MAX_POS_R = 2500;
     private final static double kD = 1.0;
     private final static double rotationPower = 0.6;
