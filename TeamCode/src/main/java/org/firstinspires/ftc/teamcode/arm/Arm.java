@@ -38,7 +38,7 @@ public class Arm {
 //        double error=MAX_POS_H-heightMotor.getCurrentPosition();
         if(heightMotor.getCurrentPosition() < MAX_POS_H){
             heightMotor.setPower(kD);
-//            error=MAX_POS_H-heightMotor.getCurrentPosition();
+//       error=MAX_POS_H-heightMotor.getCurrentPosition();
         }else{
             stopHeight();
         }
@@ -61,6 +61,9 @@ public class Arm {
              stopRotate();
          }
 
+
+
+
     }
     public static void rotateFwd(){
         Log.d("arm-rot", "Current rotation pos is: " + rotationMotor.getCurrentPosition());
@@ -69,6 +72,7 @@ public class Arm {
           }else{
               stopRotate();
           }
+
     }
 
     public static void stopRotate(){

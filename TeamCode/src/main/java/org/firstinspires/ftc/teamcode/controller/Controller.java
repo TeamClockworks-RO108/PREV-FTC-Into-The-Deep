@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.controller;
 
+
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -54,6 +56,23 @@ public class Controller extends OpMode {
             Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
         }else if(gamepad.dpad_down){
             holdingDPads[1] = false;
+        }
+
+        if(gamepad.triangle){
+            Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
+            try{
+                Thread.sleep(500);
+            }catch(InterruptedException e){
+                Log.d("control", "break interrupted!");
+
+            }
+            Gripper.toggleGripper();
+            try{
+                Thread.sleep(50);
+            }catch(InterruptedException e) {
+                Log.d("control", "break interrupted!");
+            }
+            Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
         }
     }
     public void controlMovement(){
