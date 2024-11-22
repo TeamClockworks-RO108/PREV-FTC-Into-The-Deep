@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.controller;
 
 
 
+
+import static java.lang.Thread.sleep;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -23,6 +26,7 @@ public class Controller extends OpMode {
      * <b>Idx 3: DPad Down</b>
      */
     private final Boolean[] holdingDPads = {false, false};
+
     @Override
     public void init() {
         Gripper.init(hardwareMap);
@@ -61,14 +65,14 @@ public class Controller extends OpMode {
         if(gamepad.triangle){
             Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
             try{
-                Thread.sleep(500);
+                sleep(500);
             }catch(InterruptedException e){
                 Log.d("control", "break interrupted!");
 
             }
             Gripper.toggleGripper();
             try{
-                Thread.sleep(50);
+                sleep(50);
             }catch(InterruptedException e) {
                 Log.d("control", "break interrupted!");
             }
@@ -97,5 +101,6 @@ public class Controller extends OpMode {
         }else{
             Arm.stopRotate();
         }
+        Arm.update();
     }
 }
