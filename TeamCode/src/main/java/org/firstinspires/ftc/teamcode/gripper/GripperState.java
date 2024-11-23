@@ -18,30 +18,32 @@ public class GripperState {
 
     public static void init(){
         stage = State.ROTATE_SERVO;
-        startTime=System.nanoTime();
+        startTime=getCurrentTime();
         Log.d("gripperstate","state init");
     }
     public static long getCurrentTime(){
-        return System.nanoTime();
+        return System.nanoTime() / 1000000;
     }
     public static long getDiff(){
+        Log.d("time","current time:"+getCurrentTime());
+        Log.d("time","start time:"+startTime);
         return getCurrentTime() - startTime;
     }
     public static void checkAndUpdate(){
         if(stage == State.ROTATE_SERVO){
             Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
             stage = State.RELEASE_GRIPPER;
-            Log.d("gripperstate","state cahnges, servo max rotation");
+            Log.d("gripperstate","state changes, servo max rotation");
         }
-        if(getDiff() > 5000 && stage == State.RELEASE_GRIPPER){
+        if(getDiff() > 500 && stage == State.RELEASE_GRIPPER){
             Gripper.toggleGripper();
             stage = State.ROTATE_BACK;
-            Log.d("gripperstate","state cahnges, servo released");
+            Log.d("gripperstate","state changes, servo released");
         }
-        if(getDiff() > 6000 && stage == State.ROTATE_BACK){
+        if(getDiff() > 600 && stage == State.ROTATE_BACK){
             Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
             stage = State.FINISHED;
-            Log.d("gripperstate","state cahnges, servo min rotation");
+            Log.d("gripperstate","state changes, servo min rotation");
         }
     }
     public static boolean startNextState(long delay) {
