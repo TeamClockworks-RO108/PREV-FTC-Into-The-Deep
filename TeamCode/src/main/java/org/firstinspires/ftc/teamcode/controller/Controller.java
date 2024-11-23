@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.controller;
 
 
 
+import static org.firstinspires.ftc.teamcode.gripper.GripperState.getCurrentTime;
+import static org.firstinspires.ftc.teamcode.gripper.GripperState.startNextState;
+import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 import android.util.Log;
@@ -13,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.arm.Arm;
 import org.firstinspires.ftc.teamcode.gripper.Gripper;
+import org.firstinspires.ftc.teamcode.gripper.GripperState;
 import org.firstinspires.ftc.teamcode.movement.Movement;
 
 @TeleOp(name = "TeleOp - Main")
@@ -28,11 +32,13 @@ public class Controller extends OpMode {
     public boolean holdingCircle = false;
     private boolean gripperState = false;
 
+
     @Override
     public void init() {
         Gripper.init(hardwareMap);
         Movement.init(hardwareMap);
         Arm.init(hardwareMap);
+
     }
 
     @Override
@@ -77,19 +83,22 @@ public class Controller extends OpMode {
 */
         if(gamepad.triangle){
             Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
-            try{
-                sleep(500);
-            }catch(InterruptedException e){
-                Log.d("control", "break interrupted!");
+
+            if(GripperState.startNextState(500)){
+
+
+                Gripper.toggleGripper();
+                GripperState.init();
 
             }
+
             Gripper.toggleGripper();
-            try{
-                sleep(50);
-            }catch(InterruptedException e) {
-                Log.d("control", "break interrupted!");
+
+            if(GripperState.startNextState(50)) {
+
+                Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
+                GripperState.init();
             }
-            Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
         }
     }
     public void controlMovement(){
@@ -116,4 +125,10 @@ public class Controller extends OpMode {
         }
         Arm.update();
     }
-}
+
+
+
+
+
+    }
+
