@@ -25,7 +25,8 @@ public class Controller extends OpMode {
      * <b>Idx 2: DPad Up</b><br>
      * <b>Idx 3: DPad Down</b>
      */
-    private final Boolean[] holdingDPads = {false, false};
+    public boolean holdingCircle = false;
+    private boolean gripperState = false;
 
     @Override
     public void init() {
@@ -42,6 +43,18 @@ public class Controller extends OpMode {
     }
 
     public void controlGripper(Gamepad gamepad){
+        if(gamepad.circle && !holdingCircle){
+            holdingCircle = true;
+            if(gripperState) {
+                Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
+            }else{
+                Gripper.rotate((Gripper.MIN_SERVO_ROTATION));
+            }
+            gripperState = !gripperState;
+        }else if(!gamepad.circle){
+            holdingCircle =false;
+        }
+
         if(gamepad.cross && !holdSquare){
             holdSquare = true;
             Gripper.toggleGripper();
@@ -49,7 +62,7 @@ public class Controller extends OpMode {
             holdSquare = false;
         }
 
-        if(gamepad.dpad_up && !holdingDPads[0]){
+     /*   if(gamepad.dpad_up && !holdingDPads[0]){
             holdingDPads[0] = true;
             Gripper.rotate(Gripper.MIN_SERVO_ROTATION)                                                                                          ;
         }else if(gamepad.dpad_up){
@@ -61,7 +74,7 @@ public class Controller extends OpMode {
         }else if(gamepad.dpad_down){
             holdingDPads[1] = false;
         }
-
+*/
         if(gamepad.triangle){
             Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
             try{
