@@ -13,7 +13,9 @@ public class Arm {
 
     private final static String MOTOR_NAME_R="Motor Arm Rotation";
     private final static String MOTOR_NAME_H="Motor Arm Height";
-    private final static int MAX_POS_H = 4500;
+    private static int MAX_POS_H = 4500;
+    private static final int REAL_MAX = 4500;
+    private static final int LIMITED_MAX = REAL_MAX / 2;
 
     private final static int MIN_POS_R= -1450;
     private final static int MAX_POS_R = 1350;
@@ -38,6 +40,7 @@ public class Arm {
 
         rotationMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         Log.d("arm", "Init finished");
+        adjustPosition();
     }
 
     public static void extend(){
@@ -50,23 +53,30 @@ public class Arm {
 //
         runToLocation(false);
     }
+    public static void changeMaxHeight(int height){
+        MAX_POS_H = height;
+    }
+    public static void adjustPosition (){
+        if (rotationMotor.getCurrentPosition() < -1200) {
+            changeMaxHeight(REAL_MAX);
+        }else{
+            changeMaxHeight(LIMITED_MAX);
+        }
+    }
     public static void rotateBwd(){
         Log.d("arm-rot", "Current rotation pos is: " + rotationMotor.getCurrentPosition());
          if(rotationMotor.getCurrentPosition()>MIN_POS_R){
             rotationMotor.setPower(-rotationPower);
+            adjustPosition();
          }else{
              stopRotate();
          }
-
-
-
-
-
     }
     public static void rotateFwd(){
         Log.d("arm-rot", "Current rotation pos is: " + rotationMotor.getCurrentPosition());
           if(rotationMotor.getCurrentPosition()<MAX_POS_R){
             rotationMotor.setPower(rotationPower);
+            adjustPosition();
           }else{
               stopRotate();
           }

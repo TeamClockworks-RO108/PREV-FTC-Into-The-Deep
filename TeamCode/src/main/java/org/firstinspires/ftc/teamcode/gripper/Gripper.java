@@ -18,7 +18,7 @@ public class Gripper {
         rotationServo = hardwareMap.get(Servo.class, "Servo Rotation");
         isOpen = true;
         gripperServo.setPosition(MIN_SERVO_GRIP);
-        rotationServo.setPosition(MIN_SERVO_ROTATION); //tune
+        rotationServo.setPosition(MAX_SERVO_ROTATION); //tune
     }
     public static void release (){
         gripperServo.setPosition(MIN_SERVO_GRIP);
