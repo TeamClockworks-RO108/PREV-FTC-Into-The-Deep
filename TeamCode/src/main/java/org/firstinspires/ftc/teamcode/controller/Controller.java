@@ -30,6 +30,7 @@ public class Controller extends OpMode {
      * <b>Idx 3: DPad Down</b>
      */
     public boolean holdingCircle = false;
+    public boolean holdingTriangle=false;
     private boolean gripperState = false;
 
 
@@ -48,59 +49,35 @@ public class Controller extends OpMode {
         controlMovement();
     }
 
-    public void controlGripper(Gamepad gamepad){
-        if(gamepad.circle && !holdingCircle){
+    public void controlGripper(Gamepad gamepad) {
+        if (gamepad.circle && !holdingCircle) {
             holdingCircle = true;
-            if(gripperState) {
+            if (gripperState) {
                 Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
-            }else{
+            } else {
                 Gripper.rotate((Gripper.MIN_SERVO_ROTATION));
             }
             gripperState = !gripperState;
-        }else if(!gamepad.circle){
-            holdingCircle =false;
+        } else if (!gamepad.circle) {
+            holdingCircle = false;
         }
 
-        if(gamepad.cross && !holdSquare){
+        if (gamepad.cross && !holdSquare) {
             holdSquare = true;
             Gripper.toggleGripper();
-        }else if(!gamepad1.cross){
+        } else if (!gamepad1.cross) {
             holdSquare = false;
         }
-
-     /*   if(gamepad.dpad_up && !holdingDPads[0]){
-            holdingDPads[0] = true;
-            Gripper.rotate(Gripper.MIN_SERVO_ROTATION)                                                                                          ;
-        }else if(gamepad.dpad_up){
-            holdingDPads[0] = false;
+        if (gamepad.triangle && !holdingTriangle) {
+            GripperState.init();
+            holdingTriangle = true;
+        } else if (!gamepad.triangle){
+            holdingTriangle = false;
         }
-        if(gamepad.dpad_down && !holdingDPads[1]){
-            holdingDPads[1] = true;
-            Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
-        }else if(gamepad.dpad_down){
-            holdingDPads[1] = false;
-        }
-*/
-        if(gamepad.triangle){
-            Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
-
-            if(GripperState.startNextState(500)){
-
-
-                Gripper.toggleGripper();
-                GripperState.init();
-
-            }
-
-            Gripper.toggleGripper();
-
-            if(GripperState.startNextState(50)) {
-
-                Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
-                GripperState.init();
-            }
-        }
+        GripperState.checkAndUpdate();
     }
+
+
     public void controlMovement(){
         Movement.move(gamepad1);
     }
