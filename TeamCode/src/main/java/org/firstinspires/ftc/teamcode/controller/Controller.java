@@ -1,13 +1,5 @@
 package org.firstinspires.ftc.teamcode.controller;
 
-
-
-
-import static org.firstinspires.ftc.teamcode.gripper.GripperState.getCurrentTime;
-import static org.firstinspires.ftc.teamcode.gripper.GripperState.startNextState;
-import static java.lang.Thread.currentThread;
-import static java.lang.Thread.sleep;
-
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -22,13 +14,6 @@ import org.firstinspires.ftc.teamcode.movement.Movement;
 @TeleOp(name = "TeleOp - Main")
 public class Controller extends OpMode {
     private boolean holdSquare = false;
-    /**
-     * <h3>Boolean Array container for DPad holding variables.</h3><br>
-     * <b>Idx 0: DPad Left</b><br>
-     * <b>Idx 1: DPad Right</b><br>
-     * <b>Idx 2: DPad Up</b><br>
-     * <b>Idx 3: DPad Down</b>
-     */
     public boolean holdingCircle = false;
     public boolean holdingTriangle=false;
     private boolean gripperState = false;
@@ -44,9 +29,11 @@ public class Controller extends OpMode {
 
     @Override
     public void loop() {
-        controlGripper(gamepad1);
+        if(!Arm.isBlocked()) {
+            controlGripper(gamepad1);
+        }
         controlArm(gamepad1);
-        controlMovement();
+        controlMovement(gamepad1);
     }
 
     public void controlGripper(Gamepad gamepad) {
@@ -77,35 +64,29 @@ public class Controller extends OpMode {
         GripperState.checkAndUpdate();
     }
 
-
-    public void controlMovement(){
-        Movement.move(gamepad1);
+    public void controlMovement(Gamepad gamepad){
+        Movement.move(gamepad);
     }
     public void controlArm(Gamepad gamepad){
         if(gamepad.right_trigger > 0){
-            Log.d("controls", "Pressed right bumper");
+            Log.d("controls", "Pressed right trigger");
             Arm.extend();
         }else if(gamepad.left_trigger > 0){
-            Log.d("controls", "Pressed left bumper");
+            Log.d("controls", "Pressed left trigger");
             Arm.retract();
         }else{
             Arm.stopHeight();
         }
         if(gamepad.right_bumper){
-            Log.d("controls", "Pressed dpad up");
+            Log.d("controls", "Pressed right bumper");
             Arm.rotateFwd();
         } else if(gamepad.left_bumper){
-            Log.d("controls", "Pressed dpad down");
+            Log.d("controls", "Pressed left bumper");
             Arm.rotateBwd();
         }else{
             Arm.stopRotate();
         }
         Arm.update();
     }
-
-
-
-
-
-    }
+}
 

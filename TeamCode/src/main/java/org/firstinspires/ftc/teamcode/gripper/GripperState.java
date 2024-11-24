@@ -46,12 +46,4 @@ public class GripperState {
             Log.d("gripperstate","state changes, servo min rotation");
         }
     }
-    public static boolean startNextState(long delay) {
-        if (delay>=getCurrentTime()- startTime){
-            return true;
-    }
-        return false;
-    }
-
-
 }

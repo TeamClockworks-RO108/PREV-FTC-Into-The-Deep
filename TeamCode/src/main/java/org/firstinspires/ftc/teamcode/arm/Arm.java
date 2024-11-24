@@ -11,20 +11,19 @@ public class Arm {
     private static DcMotor rotationMotor;
     private static DcMotor heightMotor;
 
-    private final static String MOTOR_NAME_R="Motor Arm Rotation";
-    private final static String MOTOR_NAME_H="Motor Arm Height";
+    private final static String MOTOR_NAME_R = "Motor Arm Rotation";
+    private final static String MOTOR_NAME_H = "Motor Arm Height";
     private static int MAX_POS_H = 4500;
     private static final int REAL_MAX = 4500;
     private static final int LIMITED_MAX = REAL_MAX / 2;
 
-    private final static int MIN_POS_R= -1450;
+    private final static int MIN_POS_R = -1450;
     private final static int MAX_POS_R = 1350;
 
-
-    private final static double kD = 1.0;
     private final static double rotationPower = 0.6;
 
-    private static boolean running= false;
+    private static boolean running = false;
+    private static boolean blocked = false;
 
 
     public static void init(HardwareMap hardwareMap) {
@@ -43,73 +42,66 @@ public class Arm {
         adjustPosition();
     }
 
-    public static void extend(){
-       Log.d("arm-height", "Current height pos is: " + heightMotor.getCurrentPosition());
-//        double error=MAX_POS_H-heightMotor.getCurrentPosition();
+    public static void extend() {
+        Log.d("arm-height", "Current height pos is: " + heightMotor.getCurrentPosition());
         runToLocation(true);
     }
-    public static void retract(){
+
+    public static void retract() {
         Log.d("arm-height", "Current height pos is: " + heightMotor.getCurrentPosition());
-//
         runToLocation(false);
     }
-    public static void changeMaxHeight(int height){
+
+    public static void changeMaxHeight(int height) {
         MAX_POS_H = height;
     }
-    public static void adjustPosition (){
+
+    public static void adjustPosition() {
         if (rotationMotor.getCurrentPosition() < -1200) {
             changeMaxHeight(REAL_MAX);
-        }else{
+        } else {
             changeMaxHeight(LIMITED_MAX);
         }
     }
-    public static void rotateBwd(){
+
+    public static void rotateBwd() {
         Log.d("arm-rot", "Current rotation pos is: " + rotationMotor.getCurrentPosition());
-         if(rotationMotor.getCurrentPosition()>MIN_POS_R){
+        if (rotationMotor.getCurrentPosition() > MIN_POS_R) {
             rotationMotor.setPower(-rotationPower);
             adjustPosition();
-         }else{
-             stopRotate();
-         }
+        } else {
+            stopRotate();
+        }
     }
-    public static void rotateFwd(){
+
+    public static void rotateFwd() {
         Log.d("arm-rot", "Current rotation pos is: " + rotationMotor.getCurrentPosition());
-          if(rotationMotor.getCurrentPosition()<MAX_POS_R){
+        if (rotationMotor.getCurrentPosition() < MAX_POS_R) {
             rotationMotor.setPower(rotationPower);
             adjustPosition();
-          }else{
-              stopRotate();
-          }
-
-
-
-
-
-
+        } else {
+            stopRotate();
+        }
     }
 
-    public static void stopRotate(){
+    public static void stopRotate() {
         rotationMotor.setPower(0);
-
     }
-    public static void stopHeight(){
-        if(running) {
+
+    public static void stopHeight() {
+        if (running) {
             running = false;
             heightMotor.setTargetPosition(heightMotor.getCurrentPosition());
         }
-
     }
 
-    public static void runToLocation(boolean sus ) {
-
-            if (sus) {
-
-                heightMotor.setTargetPosition(MAX_POS_H);
-            } else {
-                heightMotor.setTargetPosition(0);
-            }
-            running = true;
-
+    public static void runToLocation(boolean up) {
+        if (up) {
+            heightMotor.setTargetPosition(MAX_POS_H);
+        } else {
+            heightMotor.setTargetPosition(0);
+        }
+        running = true;
     }
 
     public static void update() {
@@ -118,5 +110,22 @@ public class Arm {
         else heightMotor.setPower(1);
     }
 
-
+    public static void block(){
+        blocked = true;
+    }
+    public static void unblock(){
+        blocked = false;
+    }
+    public static boolean isBlocked(){
+        return blocked;
+    }
+    public static int getCurrentMax(){
+        return MAX_POS_H;
+    }
+    public static void forcePositionHeight(int ticks){
+        heightMotor.setTargetPosition(ticks);
+    }
+    public static DcMotor getHeightMotor(){
+        return heightMotor;
+    }
 }
