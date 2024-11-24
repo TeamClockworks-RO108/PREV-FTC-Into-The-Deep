@@ -31,7 +31,7 @@ public class GripperState {
     }
     public static void checkAndUpdate(){
         if(stage == State.ROTATE_SERVO){
-            Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
+            Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
             stage = State.RELEASE_GRIPPER;
             Log.d("gripperstate","state changes, servo max rotation");
         }
@@ -41,7 +41,7 @@ public class GripperState {
             Log.d("gripperstate","state changes, servo released");
         }
         if(getDiff() > 600 && stage == State.ROTATE_BACK){
-            Gripper.rotate(Gripper.MIN_SERVO_ROTATION);
+            Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
             stage = State.FINISHED;
             Log.d("gripperstate","state changes, servo min rotation");
         }
