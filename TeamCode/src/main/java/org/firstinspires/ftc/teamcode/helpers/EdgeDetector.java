@@ -15,7 +15,7 @@ public class EdgeDetector {
         this.state = initialState;
     }
 
-    void update(boolean newState) {
+    public void update(boolean newState) {
 
         // Update the state variable early on
         // To make calls to getter return the correct variable
