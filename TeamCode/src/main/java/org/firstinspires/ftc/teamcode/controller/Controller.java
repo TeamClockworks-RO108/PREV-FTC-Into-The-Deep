@@ -37,7 +37,7 @@ public class Controller extends OpMode {
     }
 
     public void controlGripper(Gamepad gamepad) {
-        if (gamepad.circle && !holdingCircle) {
+        if (gamepad.b && !holdingCircle) {
             holdingCircle = true;
             if (gripperState) {
                 Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
@@ -45,20 +45,20 @@ public class Controller extends OpMode {
                 Gripper.rotate((Gripper.MIN_SERVO_ROTATION));
             }
             gripperState = !gripperState;
-        } else if (!gamepad.circle) {
+        } else if (!gamepad.b) {
             holdingCircle = false;
         }
 
-        if (gamepad.cross && !holdSquare) {
+        if (gamepad.a && !holdSquare) {
             holdSquare = true;
             Gripper.toggleGripper();
-        } else if (!gamepad1.cross) {
+        } else if (!gamepad1.a) {
             holdSquare = false;
         }
-        if (gamepad.triangle && !holdingTriangle) {
+        if (gamepad.y && !holdingTriangle) {
             GripperState.init();
             holdingTriangle = true;
-        } else if (!gamepad.triangle){
+        } else if (!gamepad.y){
             holdingTriangle = false;
         }
         GripperState.checkAndUpdate();
