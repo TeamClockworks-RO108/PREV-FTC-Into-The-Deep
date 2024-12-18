@@ -23,12 +23,12 @@ public class Movement {
         List<DcMotor> movementMotors = Arrays.asList(leftFront, rightFront, leftRear, rightRear);
         movementMotors.forEach(motor -> motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public static void move(Gamepad driverGamepad){
         double power = -driverGamepad.left_stick_y;
-        double rotation = driverGamepad.right_stick_x;
+        double rotation = -driverGamepad.right_stick_x;
         double strafe = driverGamepad.left_stick_x;
 
         double frontLeftPower = power + rotation + strafe;

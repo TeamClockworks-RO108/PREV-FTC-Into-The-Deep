@@ -8,75 +8,85 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.arm.Arm;
 import org.firstinspires.ftc.teamcode.gripper.Gripper;
+import org.firstinspires.ftc.teamcode.gripper.GripperState;
 import org.firstinspires.ftc.teamcode.movement.Movement;
 
 @TeleOp(name = "TeleOp - Main")
 public class Controller extends OpMode {
     private boolean holdSquare = false;
-    /**
-     * <h3>Boolean Array container for DPad holding variables.</h3><br>
-     * <b>Idx 0: DPad Left</b><br>
-     * <b>Idx 1: DPad Right</b><br>
-     * <b>Idx 2: DPad Up</b><br>
-     * <b>Idx 3: DPad Down</b>
-     */
-    private final Boolean[] holdingDPads = {false, false};
+    public boolean holdingCircle = false;
+    public boolean holdingTriangle=false;
+    private boolean gripperState = false;
+
+
     @Override
     public void init() {
         Gripper.init(hardwareMap);
         Movement.init(hardwareMap);
         Arm.init(hardwareMap);
+
     }
 
     @Override
     public void loop() {
-        controlGripper(gamepad1);
+        if(!Arm.isBlocked()) {
+            controlGripper(gamepad1);
+        }
         controlArm(gamepad1);
-        controlMovement();
+        controlMovement(gamepad1);
     }
 
-    public void controlGripper(Gamepad gamepad){
-        if(gamepad.cross && !holdSquare){
+    public void controlGripper(Gamepad gamepad) {
+        if (gamepad.b && !holdingCircle) {
+            holdingCircle = true;
+            if (gripperState) {
+                Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
+            } else {
+                Gripper.rotate((Gripper.MIN_SERVO_ROTATION));
+            }
+            gripperState = !gripperState;
+        } else if (!gamepad.b) {
+            holdingCircle = false;
+        }
+
+        if (gamepad.a && !holdSquare) {
             holdSquare = true;
             Gripper.toggleGripper();
-        }else if(!gamepad1.cross){
+        } else if (!gamepad1.a) {
             holdSquare = false;
         }
-
-        if(gamepad.dpad_up && !holdingDPads[0]){
-            holdingDPads[0] = true;
-            Gripper.rotate(Gripper.MIN_SERVO_ROTATION)                                                                                          ;
-        }else if(gamepad.dpad_up){
-            holdingDPads[0] = false;
+        if (gamepad.y && !holdingTriangle) {
+            GripperState.init();
+            holdingTriangle = true;
+        } else if (!gamepad.y){
+            holdingTriangle = false;
         }
-        if(gamepad.dpad_down && !holdingDPads[1]){
-            holdingDPads[1] = true;
-            Gripper.rotate(Gripper.MAX_SERVO_ROTATION);
-        }else if(gamepad.dpad_down){
-            holdingDPads[1] = false;
-        }
+        GripperState.checkAndUpdate();
     }
-    public void controlMovement(){
-        Movement.move(gamepad1);
+
+    public void controlMovement(Gamepad gamepad){
+        Movement.move(gamepad);
     }
     public void controlArm(Gamepad gamepad){
         if(gamepad.right_trigger > 0){
-            Log.d("controls", "Pressed right bumper");
+            Log.d("controls", "Pressed right trigger");
             Arm.extend();
         }else if(gamepad.left_trigger > 0){
-            Log.d("controls", "Pressed left bumper");
+            Log.d("controls", "Pressed left trigger");
             Arm.retract();
         }else{
             Arm.stopHeight();
         }
         if(gamepad.right_bumper){
-            Log.d("controls", "Pressed dpad up");
+            Log.d("controls", "Pressed right bumper");
             Arm.rotateFwd();
         } else if(gamepad.left_bumper){
-            Log.d("controls", "Pressed dpad down");
+            Log.d("controls", "Pressed left bumper");
             Arm.rotateBwd();
         }else{
             Arm.stopRotate();
         }
+        Arm.update();
     }
 }
+

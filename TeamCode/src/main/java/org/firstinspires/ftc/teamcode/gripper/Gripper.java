@@ -8,8 +8,8 @@ public class Gripper {
     private static Servo gripperServo;
     private static Servo rotationServo;
     private static final double MIN_SERVO_GRIP = 0;
-    private static final double MAX_SERVO_GRIP = 1;
-    public static final double MIN_SERVO_ROTATION = 0;
+    private static final double MAX_SERVO_GRIP = 0.4;
+    public static final double MIN_SERVO_ROTATION = 0.175;
     public static final double MAX_SERVO_ROTATION = 0.9;
     private static boolean isOpen;
 
@@ -18,7 +18,7 @@ public class Gripper {
         rotationServo = hardwareMap.get(Servo.class, "Servo Rotation");
         isOpen = true;
         gripperServo.setPosition(MIN_SERVO_GRIP);
-        rotationServo.setPosition(MIN_SERVO_ROTATION); //tune
+        rotationServo.setPosition(MAX_SERVO_ROTATION); //tune
     }
     public static void release (){
         gripperServo.setPosition(MIN_SERVO_GRIP);
