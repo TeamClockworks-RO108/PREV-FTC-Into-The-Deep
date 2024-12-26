@@ -59,23 +59,24 @@ public final class MecanumDrive {
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.UP;
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 50/12165.25;
+        public double inPerTick = 48.5/24220.0;
         //0.004110067610612
-        public double lateralInPerTick=-0.003459485893060865;
+        //24238
+        public double lateralInPerTick=0.0016733464030249284;
         //100/6030.0
-        public double trackWidthTicks=-33203.55870305697;
+        public double trackWidthTicks= 6797.113351206111;
         //-75610.78277445534
         //-60307.376892975524
 //-33203
         // feedforward parameters (in tick units)
-        public double kS = 0.42101855234975183;
-        public double kV = -0.0014448484583128975;
-        public double kA = 0.00025;
+        public double kS = 1.2831286344476398;
+        public double kV =  0.0003775456183778457;
+        public double kA = -0.000095;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -239,13 +240,15 @@ public final class MecanumDrive {
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
+
+
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
 
-        double inPerTick = 50/12165.0;
+        double inPerTick = 48.5/24220.0;
         localizer = new ThreeDeadWheelLocalizer(hardwareMap, inPerTick);
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
